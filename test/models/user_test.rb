@@ -71,4 +71,8 @@ class UserTest < ActiveSupport::TestCase
       test_user = User.create(first_name: "Oliver", last_name: "Smith", email: "SAM@example.com")
     end
   end
+  def test_user_should_not_have_invalid_role
+    exception = assert_raises(Exception) { @user.role = 3 }
+    assert_includes exception.message, "'3' is not a valid role"
+  end
 end
