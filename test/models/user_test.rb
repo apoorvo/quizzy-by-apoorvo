@@ -68,11 +68,38 @@ class UserTest < ActiveSupport::TestCase
     @user.email = "sam@example.com"
     @user.save!
     assert_raises ActiveRecord::RecordNotUnique do
-      test_user = User.create(first_name: "Oliver", last_name: "Smith", email: "SAM@example.com")
+      test_user = User.create(
+        first_name: "Oliver", last_name: "Smith", email: "SAM@example.com", password: "welcome",
+        password_confirmation: "welcome")
     end
   end
+
   def test_user_should_not_have_invalid_role
     exception = assert_raises(Exception) { @user.role = 3 }
     assert_includes exception.message, "'3' is not a valid role"
+  end
+
+  def test_user_should_not_be_saved_without_password
+    @user.password = nil
+    assert_not @user.save
+    assert_includes @user.errors.full_messages, "Password can't be blank"
+  end
+
+  def test_password_should_not_be_less_than_minimum_length
+    @user.password = "1234"
+    @user.password_confirmation = "1234"
+    assert @user.invalid?
+  end
+
+  def test_user_should_not_be_saved_without_password_confirmation
+    @user.password_confirmation = nil
+    assert_not @user.save
+    assert_includes @user.errors.full_messages, "Password confirmation can't be blank"
+  end
+
+  def test_user_should_match_password_and_password_confirmation
+    @user.password_confirmation = "#{@user.password}-random"
+    assert_not @user.save
+    assert_includes @user.errors.full_messages, "Password confirmation doesn't match Password"
   end
 end
