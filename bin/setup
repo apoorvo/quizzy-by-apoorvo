@@ -3,6 +3,10 @@ require "fileutils"
 
 # path to your application root.
 APP_ROOT = File.expand_path('..', __dir__)
+# populate with sample data
+puts "\n== Setting up the app =="
+system! 'bundle exec rake setup'
+
 
 def system!(*args)
   system(*args) || abort("\n== Command #{args} failed ==")
