@@ -96,3 +96,10 @@ yarn-debug.log*
 yarn-1.22.5.cjs
 yarn-1.22.5.js
 coverage
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
