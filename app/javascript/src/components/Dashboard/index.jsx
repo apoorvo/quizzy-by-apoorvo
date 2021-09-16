@@ -3,11 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { either, isEmpty, isNil } from "ramda";
 import { useHistory } from "react-router";
 
+import authApi from "apis/auth";
+import quizzesApi from "apis/quizzes";
+
 import Table from "./Table";
 
-import authApi from "../../apis/auth";
-import quizzesApi from "../../apis/quizzes";
 import { UserContext } from "../../App";
+import Button from "../Common/Button";
 import PageLoader from "../Common/PageLoader";
 
 const Dashboard = () => {
@@ -50,9 +52,7 @@ const Dashboard = () => {
         </div>
 
         <div className="w-100 flex flex-row-reverse px-6 my-2">
-          <button className="bg-blue-500 py-1 px-2 flex justify-center items-baseline text-white">
-            <i className="ri-add-box-fill p-2 text-white"></i>Add new quiz
-          </button>
+          <Button icon="ri-add-box-fill" buttonText="Add new quiz" />
         </div>
 
         <div className="w-100 m-auto text-center">

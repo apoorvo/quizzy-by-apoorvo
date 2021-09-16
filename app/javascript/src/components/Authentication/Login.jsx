@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 import { useHistory } from "react-router";
 
-import authApi from "../../apis/auth";
+import authApi from "apis/auth";
+
+import Button from "../Common/Button";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,12 +28,12 @@ const Login = () => {
     }
   };
   return (
-    <div>
+    <div className="w-100 h-screen">
       <div className="w-100 h-20 p-4 border-b-2 text-xl">
         <h1 className="font-bold">Quizzy</h1>
       </div>
-      <div className="w-100 h-100 space-y-3 pt-4 flex flex-col justify-center items-center">
-        <h1>Login</h1>
+      <div className="w-100 space-y-3 pt-4 flex flex-col justify-center items-center">
+        <h1 className="text-5xl font-bold w-1/5">Login</h1>
         <div className="flex justify-between w-1/5">
           <h3>Email:</h3>
           <input
@@ -52,10 +54,7 @@ const Login = () => {
             onChange={e => setPwd(e.target.value)}
           />
         </div>
-
-        <button onClick={handleSubmit} className="border-2 px-4 py-2">
-          Submit
-        </button>
+        <Button buttonText="Submit" className="w-1/5" onClick={handleSubmit} />
       </div>
     </div>
   );

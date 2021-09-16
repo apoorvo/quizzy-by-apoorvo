@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Switch, BrowserRouter as Router } from "react-router-dom";
+import { Switch, BrowserRouter as Router, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
@@ -27,7 +27,7 @@ const App = ({ user }) => {
         <ToastContainer />
         <Switch>
           <PrivateRoute
-            path="/"
+            path="/dashboard"
             exact
             redirectRoute="/login"
             condition={user}
@@ -37,10 +37,11 @@ const App = ({ user }) => {
           <PrivateRoute
             exact
             path="/login"
-            redirectRoute="/"
+            redirectRoute="/dashboard"
             condition={!user}
             component={Login}
           />
+          <Redirect from="/" to="/dashboard" />
         </Switch>
       </Router>
     </UserContext.Provider>
