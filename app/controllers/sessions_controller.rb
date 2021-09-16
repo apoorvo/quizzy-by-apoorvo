@@ -6,8 +6,11 @@ class SessionsController < ApplicationController
     if @user.present? && @user.authenticate(login_params[:password])
       session[:user_id] = @user.id
       render status: :ok, json: {
-        user: @user.id
+        user: @user.id,
+        notice: t("session.success")
       }
+    else
+      render status: :unauthorized, json: { error: t("session.incorrect_credentials") }
     end
   end
 
