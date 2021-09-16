@@ -16,9 +16,13 @@ const Login = () => {
         password: pwd
       }
     };
-    const result = await authApi.login(params);
-    if (result.data) {
-      history.go(0);
+    try {
+      const result = await authApi.login(params);
+      if (result.data) {
+        history.go(0);
+      }
+    } catch (err) {
+      logger.error(err);
     }
   };
   return (

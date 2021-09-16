@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { Switch, BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
-import { setAuthHeaders } from "apis/axios";
+import { registerIntercepts, setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
 
 import Login from "./components/Authentication/Login";
@@ -13,6 +14,7 @@ const App = ({ user }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     initializeLogger();
+    registerIntercepts();
     setAuthHeaders(setLoading);
   }, []);
 
@@ -20,26 +22,30 @@ const App = ({ user }) => {
     return <h1>Loading...</h1>;
   }
   return (
-    <Router>
-      <Switch>
-        <PrivateRoute
-          path="/"
-          exact
-          redirectRoute="/login"
-          condition={user}
-          component={Dashboard}
-          user={user}
-        />
-        <PrivateRoute
-          exact
-          path="/login"
-          redirectRoute="/"
-          condition={!user}
-          component={Login}
-        />
-      </Switch>
-    </Router>
+    <UserContext.Provider value={user}>
+      <Router>
+        <ToastContainer />
+        <Switch>
+          <PrivateRoute
+            path="/"
+            exact
+            redirectRoute="/login"
+            condition={user}
+            component={Dashboard}
+            user={user}
+          />
+          <PrivateRoute
+            exact
+            path="/login"
+            redirectRoute="/"
+            condition={!user}
+            component={Login}
+          />
+        </Switch>
+      </Router>
+    </UserContext.Provider>
   );
 };
+export const UserContext = React.createContext({});
 
 export default App;
