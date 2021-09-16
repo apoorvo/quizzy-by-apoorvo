@@ -1,43 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 
-import { either, isEmpty, isNil } from "ramda";
-import { useHistory } from "react-router";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 
 import authApi from "apis/auth";
-import quizzesApi from "apis/quizzes";
 
-import Table from "./Table";
+import CreateQuiz from "./Form/CreateQuiz";
+import QuizList from "./QuizList";
 
 import { UserContext } from "../../App";
-import Button from "../Common/Button";
-import PageLoader from "../Common/PageLoader";
 
 const Dashboard = () => {
   const history = useHistory();
+  const match = useRouteMatch();
   const user = useContext(UserContext);
-
-  const [quizzes, setQuizzes] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const handleLogout = async () => {
     await authApi.logout();
     history.go(0);
   };
-
-  const fetchQuizzes = async () => {
-    try {
-      const response = await quizzesApi.list();
-      setQuizzes(response.data.quizzes);
-    } catch (err) {
-      logger.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
 
   return (
     <div>
@@ -50,21 +30,10 @@ const Dashboard = () => {
             <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
-
-        <div className="w-100 flex flex-row-reverse px-6 my-2">
-          <Button icon="ri-add-box-fill" buttonText="Add new quiz" />
-        </div>
-
-        <div className="w-100 m-auto text-center">
-          {loading && <PageLoader />}
-          {either(isNil, isEmpty)(quizzes) ? (
-            <h1 className="text-xl leading-5 text-center">
-              You have not created any quiz.
-            </h1>
-          ) : (
-            <Table quizzes={quizzes} />
-          )}
-        </div>
+        <Switch>
+          <Route path={`${match.path}/new`} component={CreateQuiz} />
+          <Route path={`${match.path}`} component={QuizList} />
+        </Switch>
       </div>
     </div>
   );

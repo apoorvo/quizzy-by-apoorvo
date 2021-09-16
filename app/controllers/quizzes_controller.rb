@@ -11,9 +11,9 @@ class QuizzesController < ApplicationController
   end
 
   def create
-    quiz = Quiz.new(quiz_params, user_id: @current_user.id)
+    quiz = Quiz.new(quiz_params)
     if quiz.save
-      render status: :ok, json: { notice: "Task was successfully created" }
+      render status: :ok, json: { notice: t("quizzes.success") }
     else
       errors = task.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { error: errors }
@@ -23,6 +23,7 @@ class QuizzesController < ApplicationController
   private
 
     def quiz_params
-      params.require(:quiz).permit(:name)
+      params[:quiz].merge!(user_id: @current_user.id)
+      params.require(:quiz).permit(:name, :user_id)
     end
 end

@@ -28,7 +28,6 @@ const App = ({ user }) => {
         <Switch>
           <PrivateRoute
             path="/dashboard"
-            exact
             redirectRoute="/login"
             condition={user}
             component={Dashboard}
@@ -41,7 +40,7 @@ const App = ({ user }) => {
             condition={!user}
             component={Login}
           />
-          <Redirect from="/" to="/dashboard" />
+          <Redirect from="/" to="/login" />
         </Switch>
       </Router>
     </UserContext.Provider>
