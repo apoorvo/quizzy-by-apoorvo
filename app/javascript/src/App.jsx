@@ -20,26 +20,29 @@ const App = ({ user }) => {
     return <h1>Loading...</h1>;
   }
   return (
-    <Router>
-      <Switch>
-        <PrivateRoute
-          path="/"
-          exact
-          redirectRoute="/login"
-          condition={user}
-          component={Dashboard}
-          user={user}
-        />
-        <PrivateRoute
-          exact
-          path="/login"
-          redirectRoute="/"
-          condition={!user}
-          component={Login}
-        />
-      </Switch>
-    </Router>
+    <UserContext.Provider value={user}>
+      <Router>
+        <Switch>
+          <PrivateRoute
+            path="/"
+            exact
+            redirectRoute="/login"
+            condition={user}
+            component={Dashboard}
+            user={user}
+          />
+          <PrivateRoute
+            exact
+            path="/login"
+            redirectRoute="/"
+            condition={!user}
+            component={Login}
+          />
+        </Switch>
+      </Router>
+    </UserContext.Provider>
   );
 };
+export const UserContext = React.createContext({});
 
 export default App;
