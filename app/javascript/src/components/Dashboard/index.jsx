@@ -1,17 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 
 import authApi from "apis/auth";
 
+import quizzesApi from "apis/quizzes";
+
 import CreateQuiz from "./Form/CreateQuiz";
 import QuizList from "./QuizList";
 
 import { UserContext } from "../../App";
+import EditQuiz from "./Form/EditQuiz";
 
 const Dashboard = () => {
+  const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const history = useHistory();
   const match = useRouteMatch();
+
+  const fetchQuizzes = async () => {
+    setLoading(true);
+    try {
+      const response = await quizzesApi.list();
+      setQuizzes(response.data.quizzes);
+    } catch (err) {
+      logger.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
   const user = useContext(UserContext);
 
   const handleLogout = async () => {
@@ -31,8 +54,14 @@ const Dashboard = () => {
           </div>
         </div>
         <Switch>
-          <Route path={`${match.path}/new`} component={CreateQuiz} />
-          <Route path={`${match.path}`} component={QuizList} />
+          <Route path={`${match.path}/:id/edit`} exact>
+            <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
+          </Route>
+          <Route path={`${match.path}/new`} exact component={CreateQuiz} />
+          <Route
+            path={`${match.path}`}
+            component={() => <QuizList quizzes={quizzes} loading={loading} />}
+          />
         </Switch>
       </div>
     </div>

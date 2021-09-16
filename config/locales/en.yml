@@ -36,3 +36,4 @@ en:
     success: "Logged in succesfully."
   quizzes:
     success: "Quiz was successfully created"
+    not_found: "Quiz not found"
