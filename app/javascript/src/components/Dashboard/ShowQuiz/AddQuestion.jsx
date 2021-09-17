@@ -52,6 +52,10 @@ const AddQuestion = () => {
           question[`option${extraOptions[0]}`] =
             question[`option${extraOptions.slice(-1)}`];
         }
+
+        if (question.answer == extraOptions.slice(-1)) {
+          question.answer -= 1;
+        }
         delete question[`option${extraOptions.slice(-1)}`];
         return question;
       });
@@ -84,10 +88,11 @@ const AddQuestion = () => {
   };
 
   return (
-    <div className="mx-6 ">
-      <div className="flex">
+    <div className="mx-10 mt-8 space-y-4  w-4/12">
+      <div className="flex space-x-8 justify-between">
         <label>Question</label>
         <input
+          className="p-2 border-2 flex-grow"
           type="text"
           name="name"
           onChange={e => {
@@ -95,9 +100,10 @@ const AddQuestion = () => {
           }}
         />
       </div>
-      <div className="flex">
-        <label>Option 1</label>
+      <div className="flex space-x-8 justify-between">
+        <label>Option 1 </label>
         <input
+          className="p-2 border-2 flex-grow"
           type="text"
           name="option1"
           value={question["option1"]}
@@ -106,9 +112,10 @@ const AddQuestion = () => {
           }}
         />
       </div>
-      <div className="flex">
-        <label>Option 2</label>
+      <div className="flex justify-between space-x-8">
+        <label>Option 2 </label>
         <input
+          className="p-2 border-2 flex-grow"
           type="text"
           name="option2"
           value={question["option2"]}
@@ -117,9 +124,14 @@ const AddQuestion = () => {
           }}
         />
       </div>
-      <div className="flex ">
+      <div className="flex justify-between space-x-8">
         <div></div>
-        <button onClick={handleOptionAdd}>+Add Option</button>
+        <button
+          onClick={handleOptionAdd}
+          className="text-blue-800 underline font-bold"
+        >
+          +Add Option
+        </button>
       </div>
       {extraOptions.map(extraOption => (
         <Option
@@ -130,10 +142,13 @@ const AddQuestion = () => {
           handleOptionChange={handleOptionChange}
         />
       ))}
-      <div className="flex w-1/5">
+      <div className="flex justify-between space-x-8">
         <label>Answer</label>
         <Select
           options={answerOptions}
+          value={ANSWER_OPTIONS?.find(
+            answer => answer.value === question.answer
+          )}
           className="flex-grow"
           onChange={selection => {
             setQuestion(question => {
@@ -145,7 +160,9 @@ const AddQuestion = () => {
           }}
         />
       </div>
-      <Button buttonText="Add question" onClick={handleSubmit} />
+      <div className="w-2/5">
+        <Button buttonText="Add question" onClick={handleSubmit} />
+      </div>
     </div>
   );
 };
@@ -157,9 +174,10 @@ const Option = ({
   handleOptionChange
 }) => {
   return (
-    <div className="flex">
+    <div className="flex space-x-8 justify-between">
       <label>Option {optionNo}</label>
       <input
+        className="p-2 border-2 flex-grow"
         type="text"
         name={`option${optionNo}`}
         value={question[`option${optionNo}`]}
@@ -167,7 +185,10 @@ const Option = ({
           handleOptionChange(e);
         }}
       />
-      <i className="ri-subtract-fill" onClick={handleOptionRemove}></i>
+      <i
+        className="ri-subtract-fill text-xl bg-red-800 m-2 px-2 text-white "
+        onClick={handleOptionRemove}
+      ></i>
     </div>
   );
 };
