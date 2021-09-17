@@ -57,10 +57,18 @@ const Dashboard = () => {
           <Route path={`${match.path}/:id/edit`} exact>
             <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
           </Route>
-          <Route path={`${match.path}/new`} exact component={CreateQuiz} />
+          <Route path={`${match.path}/new`} exact>
+            <CreateQuiz fetchQuizzes={fetchQuizzes} />
+          </Route>
           <Route
             path={`${match.path}`}
-            component={() => <QuizList quizzes={quizzes} loading={loading} />}
+            component={() => (
+              <QuizList
+                quizzes={quizzes}
+                loading={loading}
+                fetchQuizzes={fetchQuizzes}
+              />
+            )}
           />
         </Switch>
       </div>

@@ -2,7 +2,7 @@
 
 class QuizzesController < ApplicationController
   before_action :authenticate_user_session
-  before_action :load_quiz, only: [:update]
+  before_action :load_quiz, only: %i[update destroy]
 
   def index
     quizzes = Quiz.where(user_id: @current_user.id)
@@ -31,7 +31,7 @@ class QuizzesController < ApplicationController
   end
 
   def destroy
-    if quiz.destroy
+    if @quiz.destroy
       render status: :ok, json: { notice: "Successfully deleted quiz." }
     else
       render status: :unprocessable_entity,

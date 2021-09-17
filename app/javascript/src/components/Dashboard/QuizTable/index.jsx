@@ -2,10 +2,11 @@ import React, { useMemo } from "react";
 import { useHistory, useRouteMatch } from "react-router";
 
 import { useTable } from "react-table";
+import quizzesApi from "../../../apis/quizzes";
 
 import { COLUMNS } from "./columns";
 
-const QuizTable = ({ quizzes }) => {
+const QuizTable = ({ quizzes, fetchQuizzes }) => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => quizzes, []);
 
@@ -16,6 +17,11 @@ const QuizTable = ({ quizzes }) => {
     columns,
     data
   });
+
+  const handleDelete = async id => {
+    await quizzesApi.destroy(id);
+    fetchQuizzes();
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
@@ -60,7 +66,7 @@ const QuizTable = ({ quizzes }) => {
                   </button>
                 </td>
                 <td className="p-2">
-                  <button>
+                  <button onClick={() => handleDelete(row.original.id)}>
                     <i className="ri-delete-bin-line"></i>
                     Delete
                   </button>

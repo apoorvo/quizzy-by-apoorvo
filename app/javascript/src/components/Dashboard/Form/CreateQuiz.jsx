@@ -7,7 +7,7 @@ import quizzesApi from "apis/quizzes";
 import Button from "../../Common/Button";
 import Toastr from "../../Common/Toastr";
 
-const CreateQuiz = () => {
+const CreateQuiz = ({ fetchQuizzes }) => {
   const [name, setName] = useState("");
 
   const history = useHistory();
@@ -17,6 +17,7 @@ const CreateQuiz = () => {
     } else {
       try {
         await quizzesApi.create({ quiz: { name } });
+        fetchQuizzes();
         history.push("/dashboard");
       } catch (err) {
         logger.error(err);

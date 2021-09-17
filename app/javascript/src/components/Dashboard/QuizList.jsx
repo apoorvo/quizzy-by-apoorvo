@@ -7,7 +7,7 @@ import Button from "../Common/Button";
 import PageLoader from "../Common/PageLoader";
 import QuizTable from "./QuizTable";
 
-const QuizList = ({ quizzes, loading }) => {
+const QuizList = ({ quizzes, loading, fetchQuizzes }) => {
   const match = useRouteMatch();
   const history = useHistory();
 
@@ -34,7 +34,7 @@ const QuizList = ({ quizzes, loading }) => {
             You have not created any quiz.
           </h1>
         ) : (
-          <QuizTable quizzes={quizzes} />
+          <QuizTable quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
         )}
       </div>
     </div>
