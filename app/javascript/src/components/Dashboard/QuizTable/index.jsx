@@ -6,6 +6,7 @@ import quizzesApi from "apis/quizzes";
 import Modal from "react-modal";
 
 import { COLUMNS } from "./columns";
+import { Link } from "react-router-dom";
 
 const QuizTable = ({ quizzes, fetchQuizzes }) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -53,8 +54,18 @@ const QuizTable = ({ quizzes, fetchQuizzes }) => {
             Are you sure you want to delete {`${selectedRow.name}`}?
           </h1>
           <div className="flex space-x-3 absolute bottom-0 mb-2">
-            <button className="px-6 py-2 border-1" onClick={()=>setIsOpen(false)}>No</button>
-            <button className="px-6 py-2 bg-red-500 text-white" onClick={()=>handleDelete(selectedRow.id)}>Yes</button>
+            <button
+              className="px-6 py-2 border-1"
+              onClick={() => setIsOpen(false)}
+            >
+              No
+            </button>
+            <button
+              className="px-6 py-2 bg-red-500 text-white"
+              onClick={() => handleDelete(selectedRow.id)}
+            >
+              Yes
+            </button>
           </div>
         </div>
       </Modal>
@@ -81,7 +92,9 @@ const QuizTable = ({ quizzes, fetchQuizzes }) => {
                 {row.cells.map(cell => {
                   return (
                     <td className="w-4/5 p-2" {...cell.getCellProps()}>
-                      {cell.render("Cell")}
+                      <Link to={`${match.url}/${row.original.id}/show`}>
+                        {cell.render("Cell")}
+                      </Link>
                     </td>
                   );
                 })}
