@@ -1,6 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch
+} from "react-router-dom";
 
 import authApi from "apis/auth";
 
@@ -11,6 +17,7 @@ import QuizList from "./QuizList";
 
 import { UserContext } from "../../App";
 import EditQuiz from "./Form/EditQuiz";
+import ShowQuiz from "./ShowQuiz";
 
 const Dashboard = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -46,7 +53,10 @@ const Dashboard = () => {
     <div>
       <div className="w-100 flex flex-col">
         <div className="w-100 h-20 p-4 border-b-2 text-xl flex justify-between">
-          <h1>Quizzy</h1>
+          <Link to={`${match.url}`}>
+            {" "}
+            <h1>Quizzy</h1>{" "}
+          </Link>
           <div className="flex justify-end space-x-3 items-baseline">
             <h1>Reports</h1>
             <h1>{`${user.first_name} ${user.last_name}`}</h1>
@@ -56,6 +66,9 @@ const Dashboard = () => {
         <Switch>
           <Route path={`${match.path}/:id/edit`} exact>
             <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
+          </Route>
+          <Route path={`${match.path}/:id/show`} exact>
+            <ShowQuiz quizzes={quizzes} />
           </Route>
           <Route path={`${match.path}/new`} exact>
             <CreateQuiz fetchQuizzes={fetchQuizzes} />
