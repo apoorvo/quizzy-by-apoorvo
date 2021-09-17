@@ -1,32 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { either, isEmpty, isNil } from "ramda";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-import quizzesApi from "apis/quizzes";
-
-import Table from "./Table";
-
 import Button from "../Common/Button";
 import PageLoader from "../Common/PageLoader";
+import QuizTable from "./QuizTable";
 
-const QuizList = () => {
-  const [quizzes, setQuizzes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+const QuizList = ({ quizzes, loading, fetchQuizzes }) => {
   const match = useRouteMatch();
   const history = useHistory();
-
-  const fetchQuizzes = async () => {
-    try {
-      const response = await quizzesApi.list();
-      setQuizzes(response.data.quizzes);
-    } catch (err) {
-      logger.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleAdd = () => {
     history.push({
@@ -34,9 +17,6 @@ const QuizList = () => {
     });
   };
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
   return (
     <div>
       <div className="w-100 flex flex-row-reverse px-6 my-2">
@@ -54,7 +34,7 @@ const QuizList = () => {
             You have not created any quiz.
           </h1>
         ) : (
-          <Table quizzes={quizzes} />
+          <QuizTable quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
         )}
       </div>
     </div>
