@@ -37,3 +37,5 @@ en:
   quizzes:
     success: "Quiz was successfully created"
     not_found: "Quiz not found"
+  questions:
+    success: "Question was successfully created"
