@@ -3,9 +3,10 @@ import React from "react";
 import { either, isEmpty, isNil } from "ramda";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
+import QuizTable from "./QuizTable";
+
 import Button from "../Common/Button";
 import PageLoader from "../Common/PageLoader";
-import QuizTable from "./QuizTable";
 
 const QuizList = ({ quizzes, loading, fetchQuizzes }) => {
   const match = useRouteMatch();

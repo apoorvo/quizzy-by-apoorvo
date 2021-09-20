@@ -1,6 +1,6 @@
 import { ANSWER_OPTIONS } from "constants";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useHistory, useParams } from "react-router";
 import Select from "react-select";
@@ -9,84 +9,102 @@ import questionsApi from "apis/questions";
 
 import Button from "../../Common/Button";
 
-const AddQuestion = () => {
-  const { id } = useParams();
+const AddQuestion = ({ prevPath }) => {
+  const { id, questionId } = useParams();
   const history = useHistory();
 
-  const [question, setQuestion] = useState({
-    name: "",
-    option1: "",
-    option2: "",
-    quiz_id: id
-  });
-  const [answerOptions, setAnswerOptions] = useState(
-    ANSWER_OPTIONS.slice(0, 2)
-  );
-  const [extraOptions, setExtraOptions] = useState([]);
-
-  const handleOptionAdd = () => {
-    if (extraOptions.length < 2) {
-      setExtraOptions(extraOptions => {
-        return [...extraOptions, extraOptions.length + 3];
-      });
-      setQuestion(question => {
-        const newOption = Number.isInteger(parseInt(extraOptions.slice(-1)))
-          ? parseInt(extraOptions.slice(-1)) + 1
-          : 3;
-        return {
-          ...question,
-          [`option${newOption}`]: ""
-        };
-      });
-      setAnswerOptions(ANSWER_OPTIONS.slice(0, extraOptions.length + 3));
+  const fetchQuestion = async () => {
+    if (questionId) {
+      const result = await questionsApi.show(questionId);
+      if (result.data.question) {
+        setQuestionVal(result.data.question);
+      }
     }
   };
 
-  const handleOptionRemove = () => {
-    if (extraOptions.length > 0) {
-      setExtraOptions(extraOptions => {
-        return extraOptions.slice(0, -1);
-      });
-      setQuestion(question => {
-        if (extraOptions.slice(-1) == 4) {
-          question[`option${extraOptions[0]}`] =
-            question[`option${extraOptions.slice(-1)}`];
-        }
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
 
-        if (question.answer == extraOptions.slice(-1)) {
-          question.answer -= 1;
-        }
-        delete question[`option${extraOptions.slice(-1)}`];
-        return question;
+  const [questionVal, setQuestionVal] = useState({
+    name: "",
+    option1: "",
+    option2: "",
+    quiz_id: id,
+    options_count: 2,
+    answer: 1
+  });
+
+  const [answerOptions, setAnswerOptions] = useState(
+    ANSWER_OPTIONS.slice(0, questionVal.options_count)
+  );
+
+  const addOption = () => {
+    if (questionVal.options_count < 4) {
+      const newOptionsCount = questionVal.options_count + 1;
+      setAnswerOptions(ANSWER_OPTIONS.slice(0, newOptionsCount));
+      setQuestionVal({
+        ...questionVal,
+        options_count: newOptionsCount,
+        [`option${newOptionsCount}`]: ""
       });
-      setAnswerOptions(
-        ANSWER_OPTIONS.slice(0, extraOptions.slice(0, -1).length + 2)
-      );
+    }
+  };
+
+  const removeOption = optionNo => {
+    if (questionVal.options_count > 2) {
+      const newOptionsCount = questionVal.options_count - 1;
+      setAnswerOptions(ANSWER_OPTIONS.slice(0, newOptionsCount));
+      setQuestionVal(questionVal => {
+        if (questionVal.options_count === 4 && optionNo === 3) {
+          questionVal.option3 = questionVal.option4;
+        }
+        if (questionVal.answer === questionVal.options_count) {
+          questionVal.answer -= 1;
+        }
+        delete questionVal[`option${questionVal.options_count}`];
+        questionVal.options_count = newOptionsCount;
+
+        return questionVal;
+      });
     }
   };
 
   const handleOptionChange = e => {
-    setQuestion(question => {
+    setQuestionVal(question => {
       return { ...question, [e.target.name]: e.target.value };
     });
   };
 
   const handleSubmit = async () => {
     if (
-      question.answer &&
-      question.name &&
-      question.option1 &&
-      question.option2
+      questionVal.answer &&
+      questionVal.name &&
+      questionVal.option1 &&
+      questionVal.option2 &&
+      questionVal.options_count
     ) {
-      try {
-        await questionsApi.create({ question });
-        history.goBack();
-      } catch (err) {
-        logger.error(err);
+      if (questionId) {
+        try {
+          await questionsApi.update({
+            questionId,
+            payload: {
+              question: questionVal
+            }
+          });
+        } catch (err) {
+          logger.error(err);
+        }
+      } else {
+        try {
+          await questionsApi.create({ question: questionVal });
+        } catch (err) {
+          logger.error(err);
+        }
       }
+      history.push(prevPath);
     }
   };
-
   return (
     <div className="mx-10 mt-8 space-y-4  w-4/12">
       <div className="flex space-x-8 justify-between">
@@ -95,65 +113,44 @@ const AddQuestion = () => {
           className="p-2 border-2 flex-grow"
           type="text"
           name="name"
+          value={questionVal.name}
           onChange={e => {
             handleOptionChange(e);
           }}
         />
       </div>
-      <div className="flex space-x-8 justify-between">
-        <label>Option 1 </label>
-        <input
-          className="p-2 border-2 flex-grow"
-          type="text"
-          name="option1"
-          value={question["option1"]}
-          onChange={e => {
-            handleOptionChange(e);
-          }}
-        />
-      </div>
-      <div className="flex justify-between space-x-8">
-        <label>Option 2 </label>
-        <input
-          className="p-2 border-2 flex-grow"
-          type="text"
-          name="option2"
-          value={question["option2"]}
-          onChange={e => {
-            handleOptionChange(e);
-          }}
-        />
-      </div>
+      {answerOptions.map(answerOption => {
+        return (
+          <Option
+            key={answerOption.value}
+            optionNo={answerOption.value}
+            removeOption={removeOption}
+            question={questionVal}
+            handleOptionChange={handleOptionChange}
+          />
+        );
+      })}
       <div className="flex justify-between space-x-8">
         <div></div>
         <button
-          onClick={handleOptionAdd}
+          onClick={addOption}
           className="text-blue-800 underline font-bold"
         >
           +Add Option
         </button>
       </div>
-      {extraOptions.map(extraOption => (
-        <Option
-          key={extraOption}
-          optionNo={extraOption}
-          question={question}
-          handleOptionRemove={handleOptionRemove}
-          handleOptionChange={handleOptionChange}
-        />
-      ))}
       <div className="flex justify-between space-x-8">
         <label>Answer</label>
         <Select
           options={answerOptions}
-          value={ANSWER_OPTIONS?.find(
-            answer => answer.value === question.answer
+          value={answerOptions?.find(
+            answer => answer.value === questionVal.answer
           )}
           className="flex-grow"
           onChange={selection => {
-            setQuestion(question => {
+            setQuestionVal(questionVal => {
               return {
-                ...question,
+                ...questionVal,
                 answer: selection.value
               };
             });
@@ -161,18 +158,16 @@ const AddQuestion = () => {
         />
       </div>
       <div className="w-2/5">
-        <Button buttonText="Add question" onClick={handleSubmit} />
+        <Button
+          buttonText={questionId ? "Edit question" : "Add question"}
+          onClick={handleSubmit}
+        />
       </div>
     </div>
   );
 };
 
-const Option = ({
-  optionNo,
-  question,
-  handleOptionRemove,
-  handleOptionChange
-}) => {
+const Option = ({ optionNo, question, removeOption, handleOptionChange }) => {
   return (
     <div className="flex space-x-8 justify-between">
       <label>Option {optionNo}</label>
@@ -185,10 +180,14 @@ const Option = ({
           handleOptionChange(e);
         }}
       />
-      <i
-        className="ri-subtract-fill text-xl bg-red-800 m-2 px-2 text-white "
-        onClick={handleOptionRemove}
-      ></i>
+      {optionNo > 2 && (
+        <i
+          className="ri-subtract-fill text-xl bg-red-800 m-2 px-2 text-white "
+          onClick={() => {
+            removeOption(optionNo);
+          }}
+        ></i>
+      )}
     </div>
   );
 };

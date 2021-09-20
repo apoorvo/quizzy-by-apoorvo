@@ -2,7 +2,7 @@
   "name": "quizzy",
   "private": true,
   "lint-staged": {
-    "app/javascript/**/*.{js,jsx,json}": [
+    "app/javascript/src/**/*.{js,jsx,json}": [
       "prettier --write",
       "eslint --fix",
       "git add"
@@ -57,7 +57,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.0",
     "lint-staged": "^11.1.2",
-    "prettier": "^2.3.2",
+    "prettier": "^2.4.1",
     "webpack-dev-server": "^4.1.1"
   },
   "scripts": {

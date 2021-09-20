@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_155558) do
+ActiveRecord::Schema.define(version: 2021_09_17_202620) do
 
   create_table "questions", force: :cascade do |t|
     t.text "name", null: false
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2021_09_17_155558) do
     t.integer "quiz_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "options_count", null: false
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 

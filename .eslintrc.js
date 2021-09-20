@@ -164,6 +164,12 @@ module.exports = {
       }
     },
     {
+      files: ["app/javascript/src/components/Dashboard/QuizTable/index.jsx"],
+      rules: {
+        "react/jsx-key": "off"
+      }
+    },
+    {
       files: ["app/javascript/packs/**/*.{js,jsx}"],
       rules: {
         "no-redeclare": "off"

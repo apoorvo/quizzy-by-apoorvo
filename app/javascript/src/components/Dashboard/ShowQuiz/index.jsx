@@ -11,6 +11,7 @@ import {
 import questionsApi from "apis/questions";
 
 import AddQuestion from "./AddQuestion";
+import QuestionsList from "./QuestionsList";
 
 import Button from "../../Common/Button";
 
@@ -21,15 +22,25 @@ const ShowQuiz = ({ quizzes }) => {
 
   const currentQuiz = quizzes?.find(elem => elem.id == id);
   const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchQuestions = async () => {
     const result = await questionsApi.list({ quiz_id: id });
     setQuestions(result.data.questions);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchQuestions();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="w-100 h-screen flex justify-center items-center">
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="w-100 h-screen p-4 flex flex-col">
@@ -46,15 +57,17 @@ const ShowQuiz = ({ quizzes }) => {
         </Route>
       </div>
       <Switch>
-        <Route exact path={`${match.path}/new`}>
-          <AddQuestion />
+        <Route exact path={`${match.path}/:questionId/edit`}>
+          <AddQuestion prevPath={match.url} />
         </Route>
-        <Route exact path={match.path}>
-          <div className="w-100 mt-6 h-2 flex flex-col items-center justify-center">
-            <h1 className="text-xl">
-              There are {questions.length} questions in this quiz.
-            </h1>
-          </div>
+        <Route exact path={`${match.path}/new`}>
+          <AddQuestion prevPath={match.url} />
+        </Route>
+        <Route path={match.path}>
+          <QuestionsList
+            questions={questions}
+            fetchQuestions={fetchQuestions}
+          />
         </Route>
       </Switch>
     </div>

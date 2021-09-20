@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router";
 
-import { useTable } from "react-table";
-import quizzesApi from "apis/quizzes";
 import Modal from "react-modal";
+import { useHistory, useRouteMatch } from "react-router";
+import { Link } from "react-router-dom";
+import { useTable } from "react-table";
+
+import quizzesApi from "apis/quizzes";
 
 import { COLUMNS } from "./columns";
-import { Link } from "react-router-dom";
 
 const QuizTable = ({ quizzes, fetchQuizzes }) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -100,23 +101,25 @@ const QuizTable = ({ quizzes, fetchQuizzes }) => {
                 })}
                 <td className="p-2">
                   <button
+                    className="bg-blue-300 flex items-center rounded px-4 py-2"
                     onClick={() => {
                       history.push(`${match.path}/${row.original.id}/edit`);
                     }}
                   >
                     <i className="ri-pencil-line"></i>
-                    Edit
+                    <h1>Edit</h1>
                   </button>
                 </td>
                 <td className="p-2">
                   <button
+                    className="bg-red-500 flex px-4 items-center rounded py-2 text-white"
                     onClick={() => {
                       setSelectedRow(row.original);
                       setIsOpen(true);
                     }}
                   >
                     <i className="ri-delete-bin-line"></i>
-                    Delete
+                    <h1>Delete</h1>
                   </button>
                 </td>
               </tr>
