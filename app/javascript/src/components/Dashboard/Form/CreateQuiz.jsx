@@ -4,6 +4,7 @@ import { all, either, equals, isNil } from "ramda";
 import { useHistory } from "react-router-dom";
 
 import quizzesApi from "apis/quizzes";
+
 import Button from "../../Common/Button";
 import Toastr from "../../Common/Toastr";
 
