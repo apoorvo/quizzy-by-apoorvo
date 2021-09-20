@@ -1,4 +1,4 @@
 # Quizzy By Apoorvo
 
 ## Heroku link
-https://lit-harbor-84097.herokuapp.com/
+https://quizzy-by-apoorvo.herokuapp.com/
