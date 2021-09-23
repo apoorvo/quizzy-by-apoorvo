@@ -5,14 +5,14 @@ class QuizzesController < ApplicationController
   before_action :load_quiz, only: %i[update destroy]
 
   def index
-    quizzes = Quiz.where(user_id: @current_user.id)
+    quizzes = @current_user.quizzes
     render status: :ok, json: {
       quizzes: quizzes
     }
   end
 
   def create
-    quiz = Quiz.new(quiz_params)
+    quiz = @current_user.quizzes.new(quiz_params)
     if quiz.save
       render status: :ok, json: { notice: t("quizzes.success") }
     else
@@ -42,8 +42,7 @@ class QuizzesController < ApplicationController
   private
 
     def quiz_params
-      params[:quiz].merge!(user_id: @current_user.id)
-      params.require(:quiz).permit(:name, :user_id, :id)
+      params.require(:quiz).permit(:name, :id)
     end
 
     def load_quiz

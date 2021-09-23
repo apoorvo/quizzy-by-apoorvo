@@ -13,4 +13,8 @@ export const ANSWER_OPTIONS = [
   { value: 4, label: "Option 4" }
 ];
 
+export const BASE_URL = "http://localhost:3000";
+
+export const BASE_PUBLIC_URL = "http://localhost:3000/public";
+
 export { TOASTR_OPTIONS };
