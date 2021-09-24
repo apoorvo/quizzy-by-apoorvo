@@ -15,7 +15,10 @@ const AddQuestion = ({ prevPath }) => {
 
   const fetchQuestion = async () => {
     if (questionId) {
-      const result = await questionsApi.show(questionId);
+      const result = await questionsApi.show({
+        questionId,
+        payload: { quiz_id: id }
+      });
       if (result.data.question) {
         setQuestionVal(result.data.question);
       }
@@ -89,6 +92,7 @@ const AddQuestion = ({ prevPath }) => {
           await questionsApi.update({
             questionId,
             payload: {
+              quiz_id: id,
               question: questionVal
             }
           });

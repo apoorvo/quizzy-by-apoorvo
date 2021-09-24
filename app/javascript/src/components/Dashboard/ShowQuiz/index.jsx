@@ -1,3 +1,5 @@
+import { BASE_PUBLIC_URL } from "constants";
+
 import React, { useEffect, useState } from "react";
 
 import {
@@ -8,6 +10,7 @@ import {
   useRouteMatch
 } from "react-router";
 
+import publicviewApi from "apis/publicview";
 import questionsApi from "apis/questions";
 
 import AddQuestion from "./AddQuestion";
@@ -42,11 +45,20 @@ const ShowQuiz = ({ quizzes }) => {
     );
   }
 
+  const handlePublish = async () => {
+    await publicviewApi.create({ id: currentQuiz.id });
+  };
+
   return (
     <div className="w-100 h-screen p-4 flex flex-col">
       <div className="mt-4 mx-6 flex justify-between">
         <h1 className="text-5xl">{currentQuiz?.name}</h1>
         <Route exact path={match.path}>
+          {currentQuiz.slug ? (
+            <Button buttonText="Published" />
+          ) : (
+            <Button buttonText="Publish" onClick={handlePublish} />
+          )}
           <Button
             buttonText="Add questions"
             icon="ri-add-box-fill"
@@ -56,6 +68,17 @@ const ShowQuiz = ({ quizzes }) => {
           />
         </Route>
       </div>
+      {currentQuiz.slug && (
+        <div>
+          <a
+            href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Published at : {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+          </a>
+        </div>
+      )}
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
           <AddQuestion prevPath={match.url} />
