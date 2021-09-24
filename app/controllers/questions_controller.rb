@@ -2,19 +2,24 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user_session
+  before_action :load_quiz
 
   def index
-    questions = Question.where(quiz_id: params[:quiz_id])
-    render status: :ok, json: { questions: questions }
+    if @quiz
+      questions = @quiz.questions
+      render status: :ok, json: { questions: questions }
+    else
+      render status: :not_found, json: { error: "Quiz not found" }
+    end
    end
 
   def show
-    question = Question.find_by!(id: params[:id])
+    question = @quiz.questions.find_by!(id: params[:id])
     render status: :ok, json: { question: question }
   end
 
   def update
-    question = Question.find_by!(id: params[:id])
+    question = @quiz.questions.find_by!(id: params[:id])
     if question && question.update(question_params)
       render status: :ok, json: { notice: "Successfully updated question." }
     else
@@ -24,7 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    question = Question.new(question_params)
+    question = @question.questions.new(question_params)
     if question.save
       render status: :ok, json: { notice: t("questions.success") }
     else
@@ -34,7 +39,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question = Question.find_by(id: params[:id])
+    question = @quiz.questions.find_by(id: params[:id])
     if question.destroy
       render status: :ok, json: { notice: "Successfully deleted question." }
     else
@@ -49,5 +54,12 @@ class QuestionsController < ApplicationController
       params.require(:question).permit(
         :name, :quiz_id, :option1, :option2, :option3, :option4, :answer,
         :options_count)
+    end
+
+    def load_quiz
+      @quiz = Quiz.find_by(id: params[:quiz_id])
+      unless @quiz
+        render status: :not_found, json: { error: t("quizzes.not_found") }
+      end
     end
 end

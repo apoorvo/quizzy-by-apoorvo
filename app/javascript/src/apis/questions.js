@@ -2,7 +2,8 @@ import axios from "axios";
 
 const list = payload => axios.get("/questions", { params: payload });
 
-const show = questionId => axios.get(`/questions/${questionId}`);
+const show = ({ questionId, payload }) =>
+  axios.get(`/questions/${questionId}`, { params: payload });
 
 const update = ({ questionId, payload }) =>
   axios.put(`/questions/${questionId}`, payload);

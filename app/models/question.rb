@@ -16,14 +16,14 @@ class Question < ApplicationRecord
       case answer
       when 3
         unless option3
-          errors.add(:answer, "Answer is not valid")
+          errors.add(:answer, "is not valid")
         end
       when 4
         unless option4
-          errors.add(:answer, "Answer is not valid")
+          errors.add(:answer, "is not valid")
         end
       when not(1..4)
-        errors.add(:answer, "Answer is not valid")
+        errors.add(:answer, "is not valid")
       end
     end
 end
