@@ -10,7 +10,8 @@ const update = ({ questionId, payload }) =>
 
 const create = payload => axios.post("/questions", payload);
 
-const destroy = questionId => axios.delete(`/questions/${questionId}`);
+const destroy = ({ questionId, payload }) =>
+  axios.delete(`/questions/${questionId}`, { params: payload });
 
 const questionsApi = {
   list,

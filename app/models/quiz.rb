@@ -9,18 +9,9 @@ class Quiz < ApplicationRecord
 
   def set_slug
     name_slug = name.parameterize
-    latest_quiz_slug = Quiz.where(
-      "slug LIKE ? or slug LIKE ?",
-      "#{name_slug}",
-      "#{name_slug}-%"
-    ).order(slug: :desc).first&.slug
-    slug_count = 0
-    if latest_quiz_slug.present?
-      slug_count = latest_quiz_slug.split("-").last.to_i
-      only_one_slug_exists = slug_count == 0
-      slug_count = 1 if only_one_slug_exists
+    if Quiz.exists?(slug: name_slug)
+      name_slug = "#{name_slug}-#{id}"
     end
-    slug_candidate = slug_count.positive? ? "#{name_slug}-#{slug_count + 1}" : name_slug
-    self.slug = slug_candidate
+    self.slug = name_slug
   end
 end

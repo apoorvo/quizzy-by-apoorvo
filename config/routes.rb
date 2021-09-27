@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :publicview, only: %i[show create], param: :slug
   resources :quizzes, only: %i[index create update destroy]
   resources :questions, only: %i[index show update create destroy]
+  resources :users, only: %i[create]
 
   root "home#index"
   get "*path", to: "home#index", via: :all
