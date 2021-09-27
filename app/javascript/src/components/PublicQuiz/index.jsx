@@ -18,6 +18,8 @@ const PublicQuiz = () => {
     email: ""
   });
 
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
+
   const [userSubmitted, setUserSubmitted] = useState(false);
 
   const [quiz, setQuiz] = useState({});
@@ -46,14 +48,17 @@ const PublicQuiz = () => {
 
   const handleUserSubmit = async () => {
     try {
-      await usersApi.create({ user });
+      const res = await usersApi.create({ user, quiz_id: quiz?.id });
+      setUser(res.data.user);
+      setQuizSubmitted(res.data.submitted);
     } catch (err) {
       logger.error(err);
+    } finally {
+      setUserSubmitted(true);
     }
-    setUserSubmitted(true);
   };
 
-  if (userSubmitted) {
+  if (userSubmitted && !quizSubmitted) {
     return <div>{quiz?.name}</div>;
   } else {
     return (
