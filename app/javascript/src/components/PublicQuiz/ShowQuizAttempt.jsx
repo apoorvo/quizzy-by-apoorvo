@@ -88,7 +88,7 @@ const ShowQuizAttempt = ({
   return (
     <div>
       <div className="p-4">
-        <h1 className="text-xl">{quiz?.name}</h1>
+        <h1 className="text-3xl">{quiz?.name}</h1>
       </div>
       {!loading && (
         <div>

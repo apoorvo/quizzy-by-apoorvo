@@ -32,6 +32,9 @@ gem "simplecov", require: false, group: :test
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 
+# Background processing
+gem "sidekiq"
+
 group :development, :test do
   # Rails integration for factory_bot, a replacement for fixtures
   gem "factory_bot_rails"

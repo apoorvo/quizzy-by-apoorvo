@@ -28,9 +28,14 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchQuestions = async () => {
-    const result = await questionsApi.list({ quiz_id: id });
-    setQuestions(result.data.questions);
-    setLoading(false);
+    try {
+      const result = await questionsApi.list({ quiz_id: id });
+      setQuestions(result.data.questions);
+    } catch (err) {
+      logger.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -74,18 +79,20 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
           </div>
         </Route>
       </div>
-      <div className="py-4 px-6">
-        <a
-          href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Published at:
-          <span className="text-blue-500">
-            {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-          </span>
-        </a>
-      </div>
+      {currentQuiz.slug && (
+        <div className="py-4 px-6">
+          <a
+            href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Published at:
+            <span className="text-blue-500">
+              {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+            </span>
+          </a>
+        </div>
+      )}
 
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
