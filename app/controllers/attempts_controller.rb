@@ -10,9 +10,7 @@ class AttemptsController < ApplicationController
   def index
     respond_to do |format|
       format.json { render status: :ok, json: { attempts: @attempts_responses } }
-      format.csv {
-          send_data ReportDownloaderJob.perform_now(@attempts_responses),
-            filename: "Attempt-Report-#{Time.zone.today}.csv" }
+
     end
   end
 
@@ -45,7 +43,8 @@ class AttemptsController < ApplicationController
   def download_report
     if Rails.env.production?
       respond_to do |format|
-        format.csv { send_data ReportDownloaderJob.perform_now(@attempts_responses) }
+        format.csv {
+ send_data ReportDownloadJob.perform_now(@attempts_responses), filename: "Attempt-Report-#{Time.zone.today}.csv" }
       end
     else
       if @download_record
