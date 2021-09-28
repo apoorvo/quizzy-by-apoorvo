@@ -48,7 +48,7 @@ const SignUp = ({ user, handleChange, handleUserSubmit, quizName }) => {
             name="email"
           />
         </div>
-        <div className="w-2/5 self-center">
+        <div className="w-2/5 mt-4 self-center">
           <Button buttonText="Submit" onClick={handleUserSubmit} />
         </div>
       </div>

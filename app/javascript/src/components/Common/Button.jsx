@@ -10,7 +10,7 @@ const Button = ({
   icon
 }) => {
   return (
-    <div className="mt-6">
+    <div>
       <button
         type={type}
         onClick={onClick}

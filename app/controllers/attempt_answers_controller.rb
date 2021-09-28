@@ -5,20 +5,31 @@ class AttemptAnswersController < ApplicationController
 
   def create
     error = false
-    params[:attempt_answers].each do |selected_answer|
+    correct_answers_count = 0
+    incorrect_answers_count = 0
+    params[:attempt_answers].each do |submitted_answer|
       error = false
-      answer = @quiz.questions.find_by(id: selected_answer[:question_id]).answer
+      answer = @quiz.questions.find_by(id: submitted_answer[:question_id]).answer
       if answer
         attempt_answer = @attempt.attempt_answers.new(
-          question_id: selected_answer[:question_id],
-          selected_answer: selected_answer[:selected_answer], correct_answer: answer)
-        unless attempt_answer.save
-          render status: :unprocessable_entity, json: { error: attempt_answer.errors.full_messages.to_sentence }
+          question_id: submitted_answer[:question_id],
+          selected_answer: submitted_answer[:selected_answer], correct_answer: answer)
+        if attempt_answer.save
+          if attempt_answer[:selected_answer] == answer
+            correct_answers_count += 1
+          else
+            incorrect_answers_count += 1
+          end
+        else
+          render status: :unprocessable_entity,
+            json: { error: attempt_answer.errors.full_messages.to_sentence } and return
         end
       end
     end
     if not(error)
-      @attempt.update(submitted: true)
+      @attempt.update(
+        submitted: true, correct_answers_count: correct_answers_count,
+        incorrect_answers_count: incorrect_answers_count)
     end
     render json: { notice: "Quiz Submitted", submitted: true }
   end

@@ -56,31 +56,37 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
       <div className="mt-4 mx-6 flex justify-between">
         <h1 className="text-5xl">{currentQuiz?.name}</h1>
         <Route exact path={match.path}>
-          {currentQuiz.slug ? (
-            <Button buttonText="Published" />
-          ) : (
-            <Button buttonText="Publish" onClick={handlePublish} />
-          )}
-          <Button
-            buttonText="Add questions"
-            icon="ri-add-box-fill"
-            onClick={() => {
-              history.push(`${match.url}/new`);
-            }}
-          />
+          <div className="flex items-end">
+            {currentQuiz.slug ? (
+              <Button buttonText="Published" />
+            ) : (
+              <Button buttonText="Publish" onClick={handlePublish} />
+            )}
+          </div>
+          <div className="flex items-end">
+            <Button
+              buttonText="Add questions"
+              icon="ri-add-box-fill"
+              onClick={() => {
+                history.push(`${match.url}/new`);
+              }}
+            />
+          </div>
         </Route>
       </div>
-      {currentQuiz.slug && (
-        <div className="p-4">
-          <a
-            href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Published at : {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-          </a>
-        </div>
-      )}
+      <div className="py-4 px-6">
+        <a
+          href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Published at:
+          <span className="text-blue-500">
+            {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+          </span>
+        </a>
+      </div>
+
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
           <AddQuestion prevPath={match.url} />
