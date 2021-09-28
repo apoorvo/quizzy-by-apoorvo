@@ -38,7 +38,7 @@ const CreateQuiz = ({ fetchQuizzes }) => {
             value={name}
             onChange={e => setName(e.target.value)}
           />
-          <div className="w-2/5">
+          <div className="w-2/5 mt-6">
             <Button buttonText="Submit" onClick={handleSubmit} />
           </div>
         </div>

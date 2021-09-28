@@ -39,9 +39,8 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchQuestions();
-  }, []);
+  }, [loading]);
 
   if (loading) {
     return (
@@ -62,7 +61,7 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
         <h1 className="text-5xl">{currentQuiz?.name}</h1>
         <Route exact path={match.path}>
           <div className="flex items-end">
-            {currentQuiz.slug ? (
+            {currentQuiz?.slug ? (
               <Button buttonText="Published" />
             ) : (
               <Button buttonText="Publish" onClick={handlePublish} />
@@ -79,7 +78,7 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
           </div>
         </Route>
       </div>
-      {currentQuiz.slug && (
+      {currentQuiz?.slug && (
         <div className="py-4 px-6">
           <a
             href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
@@ -96,10 +95,10 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
 
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} setLoading={setLoading} />
         </Route>
         <Route exact path={`${match.path}/new`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} setLoading={setLoading} />
         </Route>
         <Route path={match.path}>
           <QuestionsList

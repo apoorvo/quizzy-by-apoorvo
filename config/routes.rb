@@ -12,7 +12,10 @@ Rails.application.routes.draw do
   resources :users, only: %i[create]
   resources :attempt_answers, only: %i[create show]
   resources :attempts, only: %i[index]
-  get "/attempts/download", to: "attempts#start_download"
+
+  get "/attempts/download/status/:job_id", to: "attempts#download_status"
+  get "/attempts/download/:job_id", to: "attempts#download_report"
+  get "/attempts/download", to: "attempts#download_start"
 
   root "home#index"
   get "*path", to: "home#index", via: :all

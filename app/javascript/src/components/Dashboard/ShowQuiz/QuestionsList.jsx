@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Modal from "react-modal";
 import { useHistory, useParams, useRouteMatch } from "react-router";
@@ -14,10 +14,6 @@ const QuestionsList = ({ questions, fetchQuestions }) => {
   const [selectedQuestion, setSelectedQuestion] = useState(
     questions ? questions[0] : {}
   );
-
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
 
   const handleDelete = async () => {
     await questionsApi.destroy({

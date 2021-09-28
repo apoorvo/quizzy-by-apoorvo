@@ -46,6 +46,7 @@ module.exports = function (api) {
       ]
     ].filter(Boolean),
     plugins: [
+      "@emotion",
       "js-logger",
       "babel-plugin-macros",
       "@babel/plugin-syntax-dynamic-import",

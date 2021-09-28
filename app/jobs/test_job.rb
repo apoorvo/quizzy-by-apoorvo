@@ -5,6 +5,6 @@ class TestJob < ApplicationJob
 
   def perform(*args)
     # Do something later
-    puts "Ran"
+    puts "Ran #{self.job_id}"
   end
 end

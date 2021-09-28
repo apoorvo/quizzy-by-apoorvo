@@ -6,7 +6,7 @@ class CreateDownloadRecords < ActiveRecord::Migration[6.1]
       t.string :job_id, null: false, index: { unique: true }
       t.boolean :completed, null: false, default: false
       t.text :content
-      t.references :user, foreign_key: true
+      t.references :user, null: false, foreign_key: true
       t.timestamps
     end
   end
