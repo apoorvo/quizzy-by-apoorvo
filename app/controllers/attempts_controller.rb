@@ -2,7 +2,7 @@
 
 class AttemptsController < ApplicationController
   before_action :authenticate_user_session
-  before_action :load_quiz_and_user, except: %i[download_report download_status]
+  before_action :load_quiz_and_user
   before_action :load_download_record, only: %i[download_status download_report]
 
   after_action :delete_download_record, only: %i[download_report]
