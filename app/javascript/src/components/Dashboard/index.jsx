@@ -56,12 +56,17 @@ const Dashboard = () => {
             <h1>Quizzy</h1>
           </Link>
           <div className="flex justify-end space-x-3 items-baseline">
-            <h1>Reports</h1>
+            <Link to={`${match.url}/reports`}>
+              <h1>Reports</h1>
+            </Link>
             <h1>{`${user.first_name} ${user.last_name}`}</h1>
             <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
         <Switch>
+          <Route path={`${match.path}/reports`} exact>
+            <div>hello</div>
+          </Route>
           <Route path={`${match.path}/:id/edit`} exact>
             <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
           </Route>

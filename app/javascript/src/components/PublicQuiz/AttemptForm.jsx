@@ -15,21 +15,23 @@ const AttemptForm = ({ questions, handleAnswerChange, handleSubmit }) => {
   });
 
   return (
-    <div>
+    <div className="w-2/5">
       {QUESTIONS_LIST}
-      <Button buttonText="Submit" onClick={handleSubmit} />
+      <div className="w-2/5">
+        <Button buttonText="Submit" onClick={handleSubmit} />
+      </div>
     </div>
   );
 };
 
 const QuestionView = ({ question, index, handleAnswerChange }) => {
   return (
-    <div>
+    <div className="w-2/5 flex p-4 space-x-8">
       <div>
-        <h1>Question {index + 1}</h1>
+        <h1 className="text-2xl">Question {index + 1}</h1>
       </div>
-      <div>
-        <h1>{question.name}</h1>
+      <div className="space-y-4">
+        <h1 className="font-bold text-2xl">{question.name}</h1>
         <div onChange={handleAnswerChange}>
           {[...Array(question.options_count).keys()].map(optionNo => {
             return (
@@ -48,7 +50,7 @@ const QuestionView = ({ question, index, handleAnswerChange }) => {
 
 const Option = ({ optionNo, question }) => {
   return (
-    <div>
+    <div className="flex items-center">
       <input type="radio" value={optionNo} name={question.id} />
       <label>{question[`option${optionNo}`]}</label>
     </div>
