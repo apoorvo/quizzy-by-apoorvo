@@ -67,20 +67,18 @@ class AttemptsController < ApplicationController
     end
 
     def load_quiz_and_user
-      unless Rails.env.production?
-        attempts = Attempt.where(submitted: true)
-        @attempts_responses = []
-        attempts.each do |attempt|
-          user = User.find_by(id: attempt[:user_id])
-          quiz = @current_user.quizzes.find_by(id: attempt[:quiz_id])
-          @attempts_responses.push(
-            {
-              quiz_name: quiz.name, user_name: "#{user.first_name} #{user.last_name}",
-              email: user.email, correct_answers_count: attempt[:correct_answers_count],
-              incorrect_answers_count: attempt[:incorrect_answers_count],
-              attempt_id: attempt[:id]
-            })
-        end
+      attempts = Attempt.where(submitted: true)
+      @attempts_responses = []
+      attempts.each do |attempt|
+        user = User.find_by(id: attempt[:user_id])
+        quiz = @current_user.quizzes.find_by(id: attempt[:quiz_id])
+        @attempts_responses.push(
+          {
+            quiz_name: quiz.name, user_name: "#{user.first_name} #{user.last_name}",
+            email: user.email, correct_answers_count: attempt[:correct_answers_count],
+            incorrect_answers_count: attempt[:incorrect_answers_count],
+            attempt_id: attempt[:id]
+          })
       end
     end
 
