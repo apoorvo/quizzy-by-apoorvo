@@ -9,7 +9,7 @@ import questionsApi from "apis/questions";
 
 import Button from "../../Common/Button";
 
-const AddQuestion = ({ prevPath, fetchQuestions }) => {
+const AddQuestion = ({ prevPath }) => {
   const { id, questionId } = useParams();
   const history = useHistory();
 
@@ -106,7 +106,6 @@ const AddQuestion = ({ prevPath, fetchQuestions }) => {
           logger.error(err);
         }
       }
-      fetchQuestions();
       history.push(prevPath);
     }
   };

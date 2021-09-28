@@ -34,6 +34,7 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchQuestions();
   }, []);
 
@@ -70,7 +71,7 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
         </Route>
       </div>
       {currentQuiz.slug && (
-        <div>
+        <div className="p-4">
           <a
             href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
             target="_blank"
@@ -82,10 +83,10 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
       )}
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
-          <AddQuestion prevPath={match.url} fetchQuestions={fetchQuestions} />
+          <AddQuestion prevPath={match.url} />
         </Route>
         <Route exact path={`${match.path}/new`}>
-          <AddQuestion prevPath={match.url} fetchQuestions={fetchQuestions} />
+          <AddQuestion prevPath={match.url} />
         </Route>
         <Route path={match.path}>
           <QuestionsList
