@@ -66,7 +66,7 @@ const Dashboard = () => {
             <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
           </Route>
           <Route path={`${match.path}/:id/show`}>
-            <ShowQuiz quizzes={quizzes} />
+            <ShowQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
           </Route>
           <Route path={`${match.path}/new`} exact>
             <CreateQuiz fetchQuizzes={fetchQuizzes} />

@@ -10,13 +10,13 @@ class PublicviewController < ApplicationController
         quiz: quiz
       }
     else
-      render status: :not_found, json: { error: "Quiz not found" }
+      render status: :not_found, json: { error: "Not a valid slug" }
     end
   end
 
   def create
     quiz = @current_user.quizzes.find_by(id: params[:id])
-    if not(quiz.slug)
+    if quiz.slug.blank?
       quiz.set_slug
       if quiz.save
         render status: :ok, json: {

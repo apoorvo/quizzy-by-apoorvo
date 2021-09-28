@@ -3,6 +3,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user_session
   before_action :load_quiz
+  before_action :load_question, except: %i[index create]
 
   def index
     if @quiz
@@ -19,17 +20,16 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question = @quiz.questions.find_by!(id: params[:id])
-    if question && question.update(question_params)
+    if @question && @question.update(question_params)
       render status: :ok, json: { notice: "Successfully updated question." }
     else
       render status: :unprocessable_entity,
-        json: { error: question.errors.full_messages.to_sentence }
+        json: { error: @question.errors.full_messages.to_sentence }
     end
   end
 
   def create
-    question = @question.questions.new(question_params)
+    question = @quiz.questions.new(question_params)
     if question.save
       render status: :ok, json: { notice: t("questions.success") }
     else
@@ -39,12 +39,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question = @quiz.questions.find_by(id: params[:id])
-    if question.destroy
+    if @question.destroy
       render status: :ok, json: { notice: "Successfully deleted question." }
     else
       render status: :unprocessable_entity,
-        json: { error: question.errors.full_messages.to_sentence }
+        json: { error: @question.errors.full_messages.to_sentence }
     end
   end
 
@@ -60,6 +59,12 @@ class QuestionsController < ApplicationController
       @quiz = Quiz.find_by(id: params[:quiz_id])
       unless @quiz
         render status: :not_found, json: { error: t("quizzes.not_found") }
+      end
+    end
+    def load_question
+      @question = @quiz.questions.find_by!(id: params[:id])
+      unless @question
+        render status: :not_found, json: { error: "Question not found" }
       end
     end
 end

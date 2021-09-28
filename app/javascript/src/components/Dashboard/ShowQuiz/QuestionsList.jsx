@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import Modal from "react-modal";
-import { useHistory, useRouteMatch } from "react-router";
+import { useHistory, useParams, useRouteMatch } from "react-router";
 
 import questionsApi from "apis/questions";
 
 const QuestionsList = ({ questions, fetchQuestions }) => {
   const match = useRouteMatch();
   const history = useHistory();
+  const { id } = useParams();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(
@@ -19,7 +20,10 @@ const QuestionsList = ({ questions, fetchQuestions }) => {
   }, []);
 
   const handleDelete = async () => {
-    await questionsApi.destroy(selectedQuestion.id);
+    await questionsApi.destroy({
+      questionId: selectedQuestion.id,
+      payload: { quiz_id: id }
+    });
     setIsOpen(false);
     fetchQuestions();
   };

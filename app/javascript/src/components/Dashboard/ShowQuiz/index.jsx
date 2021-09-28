@@ -18,7 +18,7 @@ import QuestionsList from "./QuestionsList";
 
 import Button from "../../Common/Button";
 
-const ShowQuiz = ({ quizzes }) => {
+const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
   const { id } = useParams();
   const match = useRouteMatch();
   const history = useHistory();
@@ -34,6 +34,7 @@ const ShowQuiz = ({ quizzes }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchQuestions();
   }, []);
 
@@ -47,6 +48,7 @@ const ShowQuiz = ({ quizzes }) => {
 
   const handlePublish = async () => {
     await publicviewApi.create({ id: currentQuiz.id });
+    fetchQuizzes();
   };
 
   return (
@@ -69,7 +71,7 @@ const ShowQuiz = ({ quizzes }) => {
         </Route>
       </div>
       {currentQuiz.slug && (
-        <div>
+        <div className="p-4">
           <a
             href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
             target="_blank"

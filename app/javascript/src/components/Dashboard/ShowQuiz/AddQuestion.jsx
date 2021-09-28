@@ -101,7 +101,7 @@ const AddQuestion = ({ prevPath }) => {
         }
       } else {
         try {
-          await questionsApi.create({ question: questionVal });
+          await questionsApi.create({ question: questionVal, quiz_id: id });
         } catch (err) {
           logger.error(err);
         }
