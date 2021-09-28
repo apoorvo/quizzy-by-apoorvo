@@ -17,7 +17,7 @@ const AttemptForm = ({ questions, handleAnswerChange, handleSubmit }) => {
   return (
     <div className="w-2/5">
       {QUESTIONS_LIST}
-      <div className="w-2/5">
+      <div className="w-1/5 ml-10">
         <Button buttonText="Submit" onClick={handleSubmit} />
       </div>
     </div>
@@ -28,7 +28,7 @@ const QuestionView = ({ question, index, handleAnswerChange }) => {
   return (
     <div className="w-2/5 flex p-4 space-x-8">
       <div>
-        <h1 className="text-2xl">Question {index + 1}</h1>
+        <h1 className="text-4xl">Question {index + 1}</h1>
       </div>
       <div className="space-y-4">
         <h1 className="font-bold text-2xl">{question.name}</h1>

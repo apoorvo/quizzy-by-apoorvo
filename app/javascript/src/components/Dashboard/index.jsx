@@ -14,6 +14,7 @@ import quizzesApi from "apis/quizzes";
 import CreateQuiz from "./Form/CreateQuiz";
 import EditQuiz from "./Form/EditQuiz";
 import QuizList from "./QuizList";
+import Reports from "./Reports";
 import ShowQuiz from "./ShowQuiz";
 
 import { UserContext } from "../../App";
@@ -65,7 +66,7 @@ const Dashboard = () => {
         </div>
         <Switch>
           <Route path={`${match.path}/reports`} exact>
-            <div>hello</div>
+            <Reports />
           </Route>
           <Route path={`${match.path}/:id/edit`} exact>
             <EditQuiz quizzes={quizzes} fetchQuizzes={fetchQuizzes} />
