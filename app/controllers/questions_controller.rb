@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class QuestionsController < ApplicationController
-  before_action :authenticate_user_session
+  before_action :authenticate_user_session, except: %i[index show]
   before_action :load_quiz
   before_action :load_question, except: %i[index create]
 
