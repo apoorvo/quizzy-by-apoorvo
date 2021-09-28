@@ -33,12 +33,16 @@ class UsersController < ApplicationController
     def verify_attempt(user)
       attempt = user.attempts.find_by(quiz_id: params[:quiz_id])
       if attempt
-        render status: :ok, json: { notice: "Signed up succefully", user: user, submitted: attempt.submitted }
-
+        render status: :ok,
+          json: {
+            notice: "Welcome Back #{user.first_name}", user: user, submitted: attempt.submitted,
+            attempt_id: attempt.id
+          }
       else
         attempt = user.attempts.new(quiz_id: params[:quiz_id])
         if attempt.save
-          render status: :ok, json: { notice: "Signed up succefully", user: user, submitted: false }
+          render status: :ok,
+            json: { notice: "Signed up succefully", user: user, submitted: false, attempt_id: attempt.id }
         else
           render status: :unprocessable_entity, json: { error: attempt.errors.full_messages.to_sentence }
         end

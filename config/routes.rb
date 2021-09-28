@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :quizzes, only: %i[index create update destroy]
   resources :questions, only: %i[index show update create destroy]
   resources :users, only: %i[create]
+  resources :attempt_answers, only: %i[create show]
 
   root "home#index"
   get "*path", to: "home#index", via: :all

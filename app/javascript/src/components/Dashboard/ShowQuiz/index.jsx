@@ -82,10 +82,10 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
       )}
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} fetchQuestions={fetchQuestions} />
         </Route>
         <Route exact path={`${match.path}/new`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} fetchQuestions={fetchQuestions} />
         </Route>
         <Route path={match.path}>
           <QuestionsList
