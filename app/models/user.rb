@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :quizzes, dependent: :destroy
   has_many :attempts
+  has_many :download_records
 
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
   validates :first_name, presence: true, length: { maximum: 50 }

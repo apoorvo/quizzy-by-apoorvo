@@ -6,12 +6,12 @@ import { COLUMNS } from "./columns";
 
 const ReportsTable = ({ attempts }) => {
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => attempts, []);
+  const tableData = useMemo(() => attempts, []);
 
   const tableInstance = useTable(
     {
       columns,
-      data
+      data: tableData
     },
     useSortBy
   );

@@ -17,9 +17,9 @@ const AttemptShow = ({ questions, answers }) => {
 
 const QuestionView = ({ question, index, answers }) => {
   return (
-    <div className="w-2/5 flex p-4 space-x-8">
+    <div className="w-100 flex p-4 space-x-8">
       <div>
-        <h1 className="text-4xl">Question {index + 1}</h1>
+        <h1 className="text-2xl">Question {index + 1}</h1>
       </div>
       <div className="space-y-4">
         <h1 className="font-bold text-2xl">{question.name}</h1>

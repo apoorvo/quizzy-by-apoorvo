@@ -28,15 +28,19 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchQuestions = async () => {
-    const result = await questionsApi.list({ quiz_id: id });
-    setQuestions(result.data.questions);
-    setLoading(false);
+    try {
+      const result = await questionsApi.list({ quiz_id: id });
+      setQuestions(result.data.questions);
+    } catch (err) {
+      logger.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchQuestions();
-  }, []);
+  }, [loading]);
 
   if (loading) {
     return (
@@ -57,7 +61,7 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
         <h1 className="text-5xl">{currentQuiz?.name}</h1>
         <Route exact path={match.path}>
           <div className="flex items-end">
-            {currentQuiz.slug ? (
+            {currentQuiz?.slug ? (
               <Button buttonText="Published" />
             ) : (
               <Button buttonText="Publish" onClick={handlePublish} />
@@ -74,25 +78,27 @@ const ShowQuiz = ({ quizzes, fetchQuizzes }) => {
           </div>
         </Route>
       </div>
-      <div className="py-4 px-6">
-        <a
-          href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Published at:
-          <span className="text-blue-500">
-            {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
-          </span>
-        </a>
-      </div>
+      {currentQuiz?.slug && (
+        <div className="py-4 px-6">
+          <a
+            href={`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Published at:
+            <span className="text-blue-500">
+              {`${BASE_PUBLIC_URL}/${currentQuiz.slug}`}
+            </span>
+          </a>
+        </div>
+      )}
 
       <Switch>
         <Route exact path={`${match.path}/:questionId/edit`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} setLoading={setLoading} />
         </Route>
         <Route exact path={`${match.path}/new`}>
-          <AddQuestion prevPath={match.url} />
+          <AddQuestion prevPath={match.url} setLoading={setLoading} />
         </Route>
         <Route path={match.path}>
           <QuestionsList
