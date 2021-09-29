@@ -2,7 +2,7 @@
 
 class Question < ApplicationRecord
   belongs_to :quiz
-  has_many :attempt_answers
+  has_many :attempt_answers, dependent: :destroy
 
   validate :answer_is_valid
 
