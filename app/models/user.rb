@@ -15,11 +15,19 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true, on: :create
 
+  before_validation :set_default_password
   before_save :to_lowercase
 
   private
 
     def to_lowercase
       email.downcase!
+    end
+
+    def set_default_password
+      unless self.password
+        self.password = "password"
+        self.password_confirmation = "password"
+      end
     end
 end

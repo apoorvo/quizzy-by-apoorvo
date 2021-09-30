@@ -23,11 +23,10 @@ class UsersController < ApplicationController
   private
 
     def default_user_params
-      params[:user].merge!(password: "password", password_confirmation: "password")
-      params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:first_name, :last_name, :email)
     end
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :password, :role, :password_confirmation)
+      params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
     end
 
     def verify_attempt(user)
