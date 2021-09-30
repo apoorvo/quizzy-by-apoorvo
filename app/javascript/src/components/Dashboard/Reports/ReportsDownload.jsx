@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import FadeLoader from "react-spinners/FadeLoader";
 
-import attemptsApi from "apis/attempts";
+import reportDownloadApi from "apis/report_download";
 
 import Button from "../../Common/Button";
 
@@ -12,7 +12,8 @@ const ReportsDownload = ({ downloadId }) => {
   const [downloadCompleted, setDownloadCompleted] = useState(false);
   const fetchDownloadStatus = async () => {
     try {
-      const res = await attemptsApi.download_status(downloadId);
+      // const res = await attemptsApi.download_status(downloadId);
+      const res = await reportDownloadApi.show(downloadId);
       setDownloadCompleted(res.data.status);
     } catch (err) {
       logger.error(err);
@@ -36,7 +37,7 @@ const ReportsDownload = ({ downloadId }) => {
           <h1>Report is now ready for download.</h1>
           <div>
             <a
-              href={`${BASE_URL}/attempts/download/${downloadId}.csv`}
+              href={`${BASE_URL}/downloads/reports/${downloadId}.csv`}
               target="_blank"
               rel="noreferrer"
             >

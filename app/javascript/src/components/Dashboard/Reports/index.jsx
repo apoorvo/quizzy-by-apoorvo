@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import attemptsApi from "apis/attempts";
+import reportDownloadApi from "apis/report_download";
 
 import ReportsDownload from "./ReportsDownload";
 import ReportsTable from "./ReportsTable";
@@ -32,7 +33,8 @@ const Reports = () => {
   const handleDownload = async () => {
     setLoading(true);
     try {
-      const res = await attemptsApi.download_start();
+      // const res = await attemptsApi.download_start();
+      const res = await reportDownloadApi.create();
       setDownloadId(res.data.download_id);
     } catch (err) {
       logger.error(err);
