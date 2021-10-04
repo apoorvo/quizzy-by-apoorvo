@@ -6,8 +6,7 @@ class AttemptAnswer < ApplicationRecord
 
   validates :question_id, uniqueness: { scope: :attempt_id }
 
-  before_save :set_correct_answer
-  after_save :set_attempt_answer_count
+  before_save :set_correct_answer, :set_attempt_answer_count
 
   private
 
